@@ -19,8 +19,8 @@ npx --yes esbuild index.jsx \
   --outfile=dist/index.js \
   --jsx=automatic \
   --target=es2022 \
-  --external:react \
-  --external:react-dom \
+  --loader:.jsx=jsx \
+  --loader:.js=jsx \
   --minify
 
 if [ $? -eq 0 ]; then
