@@ -11,23 +11,38 @@
         theme: {
           extend: {
             animation: {
-              float: 'float 3s ease-in-out infinite',
-              pulse: 'pulse 2s ease-in-out infinite',
+              'float': 'float 3s ease-in-out infinite',
             },
             keyframes: {
               float: {
                 '0%, 100%': { transform: 'translateY(0px)' },
                 '50%': { transform: 'translateY(-10px)' },
               },
-              pulse: {
-                '0%, 100%': { opacity: '1' },
-                '50%': { opacity: '0.7' },
-              },
             },
           },
         },
       }
     </script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: 'Noto Sans SC', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+      .meal-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+      }
+      .meal-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+      }
+      .modal-overlay {
+        backdrop-filter: blur(8px);
+      }
+    </style>
     <script type="importmap">
 {
   "imports": {
