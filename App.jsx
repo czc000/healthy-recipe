@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { getSeasonalFruit, getDailyRecipes, calculateTotalNutrition, formatDate } from '../utils/recipeData';
-import { MealCard } from './MealCard';
+import { getSeasonalFruit, getDailyRecipes, calculateTotalNutrition, formatDate } from '../utils/recipeData.js';
+import { MealCard } from './MealCard.jsx';
 
 export default function App() {
   const [recipes, setRecipes] = useState(null);
