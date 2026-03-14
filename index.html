@@ -7,7 +7,9 @@
     <meta name="description" content="每日更新时令健康食谱，一日三餐营养搭配">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      tailwind.config = {
+      // 抑制 Tailwind CDN 警告
+      window.tailwind = window.tailwind || {};
+      window.tailwind.config = {
         theme: {
           extend: {
             animation: {

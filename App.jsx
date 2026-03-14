@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { createRoot } from 'react-dom/client';
 
 // 时令水果数据
@@ -40,11 +40,11 @@ const recipes = {
 const getDailyRecipes = () => {
   const today = new Date();
   const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
-  return useMemo(() => ({
+  return {
     breakfast: recipes.breakfast[dayOfYear % recipes.breakfast.length],
     lunch: recipes.lunch[(dayOfYear + 1) % recipes.lunch.length],
     dinner: recipes.dinner[(dayOfYear + 2) % recipes.dinner.length]
-  }), [dayOfYear]);
+  };
 };
 
 // 获取时令水果
@@ -169,29 +169,18 @@ const Modal = ({ recipe, onClose }) => {
 
 // 主应用组件
 function App() {
-  const [recipes, setRecipes] = useState(null);
-  const [fruit, setFruit] = useState(null);
   const [selectedMeal, setSelectedMeal] = useState(null);
-
-  useEffect(() => {
-    setRecipes(getDailyRecipes());
-    setFruit(getSeasonalFruit());
-  }, []);
+  
+  // 使用 useMemo 缓存计算结果
+  const dailyData = useMemo(() => ({
+    recipes: getDailyRecipes(),
+    fruit: getSeasonalFruit()
+  }), []);
+  
+  const { recipes, fruit } = dailyData;
 
   const handleMealClick = useCallback((meal) => setSelectedMeal(meal), []);
   const handleCloseModal = useCallback(() => setSelectedMeal(null), []);
-
-  if (!recipes || !fruit) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center">
-        <div className="text-center text-white">
-          <div className="text-7xl mb-6 animate-bounce">🍽️</div>
-          <div className="text-2xl font-light">正在准备今日食谱...</div>
-          <div className="mt-4 w-16 h-16 border-4 border-white/30 border-t-white rounded-full animate-spin mx-auto"></div>
-        </div>
-      </div>
-    );
-  }
 
   const totalCalories = recipes.breakfast.calories + recipes.lunch.calories + recipes.dinner.calories;
 
