@@ -36,11 +36,10 @@ const recipes = {
   ]
 };
 
-// 获取今日食谱（使用 useMemo 优化）
+// 获取今日食谱
 const getDailyRecipes = () => {
   const today = new Date();
   const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
-  
   return useMemo(() => ({
     breakfast: recipes.breakfast[dayOfYear % recipes.breakfast.length],
     lunch: recipes.lunch[(dayOfYear + 1) % recipes.lunch.length],
@@ -49,54 +48,54 @@ const getDailyRecipes = () => {
 };
 
 // 获取时令水果
-const getSeasonalFruit = () => {
-  return seasonalFruits[new Date().getMonth() + 1];
-};
+const getSeasonalFruit = () => seasonalFruits[new Date().getMonth() + 1];
 
 // 格式化日期
-const formatDate = () => {
-  return new Date().toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'long' });
-};
+const formatDate = () => new Date().toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'long' });
 
-// 餐食卡片组件（使用 useCallback 优化）
+// 餐食卡片组件
 const MealCard = React.memo(({ type, recipe, onClick }) => {
   const colors = {
-    breakfast: { bg: 'from-yellow-400 to-orange-400', icon: '🌅', label: '早餐' },
-    lunch: { bg: 'from-green-400 to-emerald-500', icon: '☀️', label: '午餐' },
-    dinner: { bg: 'from-purple-400 to-indigo-500', icon: '🌙', label: '晚餐' }
+    breakfast: { bg: 'from-amber-400 to-orange-500', icon: '🌅', label: '早餐', accent: 'border-amber-500' },
+    lunch: { bg: 'from-emerald-400 to-green-500', icon: '☀️', label: '午餐', accent: 'border-emerald-500' },
+    dinner: { bg: 'from-indigo-400 to-purple-500', icon: '🌙', label: '晚餐', accent: 'border-indigo-500' }
   };
   const c = colors[type];
 
   return (
     <div 
       onClick={onClick} 
-      className="meal-card bg-white rounded-2xl overflow-hidden shadow-xl cursor-pointer hover:shadow-2xl transition-shadow duration-300"
+      className={`meal-card bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 ${c.accent} border-t-4`}
       role="button"
       tabIndex={0}
       onKeyPress={(e) => e.key === 'Enter' && onClick()}
       aria-label={`查看${c.label}${recipe.name}详情`}
     >
-      <div className={`bg-gradient-to-r ${c.bg} p-4 text-white`}>
+      <div className={`bg-gradient-to-r ${c.bg} p-6 text-white`}>
         <div className="flex items-center justify-between">
-          <h3 className="text-xl font-bold">{c.icon} {c.label}</h3>
-          <span className="text-3xl">{c.icon}</span>
+          <div>
+            <h3 className="text-2xl font-bold">{c.icon} {c.label}</h3>
+            <p className="text-sm opacity-90 mt-1">点击查看详情</p>
+          </div>
+          <span className="text-5xl">{c.icon}</span>
         </div>
       </div>
-      <div className="p-5">
-        <h4 className="text-lg font-bold text-gray-800 mb-2">{recipe.name}</h4>
-        <div className="flex items-center justify-between text-sm text-gray-500">
-          <span>🔥 {recipe.calories}大卡</span>
-          <span>⏱️ {recipe.time}</span>
+      <div className="p-6">
+        <h4 className="text-xl font-bold text-gray-800 mb-3">{recipe.name}</h4>
+        <div className="flex items-center justify-between text-sm mb-4">
+          <span className="flex items-center text-orange-600">
+            <span className="mr-1">🔥</span> {recipe.calories}大卡
+          </span>
+          <span className="flex items-center text-blue-600">
+            <span className="mr-1">⏱️</span> {recipe.time}
+          </span>
         </div>
-        <div className="flex flex-wrap gap-1 mt-3">
+        <div className="flex flex-wrap gap-2">
           {recipe.tags.map((tag, i) => (
-            <span key={i} className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">
+            <span key={i} className="px-3 py-1 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 rounded-full text-xs font-medium">
               {tag}
             </span>
           ))}
-        </div>
-        <div className="mt-4 text-center text-sm text-gray-400">
-          点击查看详情 👆
         </div>
       </div>
     </div>
@@ -108,42 +107,56 @@ const Modal = ({ recipe, onClose }) => {
   if (!recipe) return null;
 
   return (
-    <div onClick={onClose} className="modal-overlay fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
-      <div onClick={e => e.stopPropagation()} className="bg-white rounded-2xl max-w-lg w-full max-h-[80vh] overflow-y-auto">
-        <div className="sticky top-0 bg-gradient-to-r from-purple-500 to-indigo-500 p-6 text-white">
-          <h2 className="text-2xl font-bold">{recipe.name}</h2>
-          <div className="flex items-center gap-4 mt-2 text-sm opacity-90">
-            <span>🔥 {recipe.calories}大卡</span>
-            <span>⏱️ {recipe.time}</span>
+    <div onClick={onClose} className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn" role="dialog" aria-modal="true">
+      <div 
+        onClick={e => e.stopPropagation()} 
+        className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-slideUp"
+      >
+        <div className="sticky top-0 bg-gradient-to-r from-purple-500 to-indigo-500 p-8 text-white">
+          <button 
+            onClick={onClose}
+            className="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors"
+            aria-label="关闭"
+          >
+            ✕
+          </button>
+          <h2 className="text-3xl font-bold">{recipe.name}</h2>
+          <div className="flex items-center gap-6 mt-4 text-sm">
+            <span className="flex items-center">
+              <span className="mr-2 text-xl">🔥</span> {recipe.calories}大卡
+            </span>
+            <span className="flex items-center">
+              <span className="mr-2 text-xl">⏱️</span> {recipe.time}
+            </span>
           </div>
         </div>
         
-        <div className="p-6">
-          <div className="mb-6">
-            <h3 className="font-bold text-gray-800 mb-3 flex items-center">
-              <span className="mr-2">🛒</span> 食材
+        <div className="p-8">
+          <div className="mb-8">
+            <h3 className="font-bold text-gray-800 mb-4 flex items-center text-lg">
+              <span className="mr-3 text-2xl">🛒</span> 食材准备
             </h3>
-            <ul className="grid grid-cols-2 gap-2">
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {recipe.ingredients.map((item, i) => (
-                <li key={i} className="flex items-center text-sm text-gray-600">
-                  <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
-                  {item}
+                <li key={i} className="flex items-center p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl">
+                  <span className="w-3 h-3 bg-green-500 rounded-full mr-3 flex-shrink-0"></span>
+                  <span className="text-gray-700">{item}</span>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h3 className="font-bold text-gray-800 mb-3 flex items-center">
-              <span className="mr-2">👨‍🍳</span> 做法
+            <h3 className="font-bold text-gray-800 mb-4 flex items-center text-lg">
+              <span className="mr-3 text-2xl">👨‍🍳</span> 烹饪步骤
             </h3>
-            <ol className="space-y-3">
+            <ol className="space-y-4">
               {recipe.steps.map((step, i) => (
                 <li key={i} className="flex">
-                  <span className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-purple-400 to-indigo-500 text-white rounded-full text-xs flex items-center justify-center mr-3">
+                  <span className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-purple-400 to-indigo-500 text-white rounded-full text-sm font-bold flex items-center justify-center mr-4 shadow-lg">
                     {i + 1}
                   </span>
-                  <span className="text-gray-600 pt-0.5">{step}</span>
+                  <span className="text-gray-700 pt-1.5 leading-relaxed">{step}</span>
                 </li>
               ))}
             </ol>
@@ -165,20 +178,16 @@ function App() {
     setFruit(getSeasonalFruit());
   }, []);
 
-  const handleMealClick = useCallback((meal) => {
-    setSelectedMeal(meal);
-  }, []);
-
-  const handleCloseModal = useCallback(() => {
-    setSelectedMeal(null);
-  }, []);
+  const handleMealClick = useCallback((meal) => setSelectedMeal(meal), []);
+  const handleCloseModal = useCallback(() => setSelectedMeal(null), []);
 
   if (!recipes || !fruit) {
     return (
-      <div className="min-h-screen gradient-bg flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center">
         <div className="text-center text-white">
-          <div className="text-6xl mb-4 animate-bounce">🍽️</div>
-          <div className="text-xl">正在准备今日食谱...</div>
+          <div className="text-7xl mb-6 animate-bounce">🍽️</div>
+          <div className="text-2xl font-light">正在准备今日食谱...</div>
+          <div className="mt-4 w-16 h-16 border-4 border-white/30 border-t-white rounded-full animate-spin mx-auto"></div>
         </div>
       </div>
     );
@@ -187,47 +196,47 @@ function App() {
   const totalCalories = recipes.breakfast.calories + recipes.lunch.calories + recipes.dinner.calories;
 
   return (
-    <div className="min-h-screen pb-12">
+    <div className="min-h-screen bg-gradient-to-br from-purple-500 via-indigo-500 to-purple-600 pb-16">
       {/* 头部 */}
-      <header className="bg-white/10 backdrop-blur-sm shadow-lg">
-        <div className="max-w-4xl mx-auto px-4 py-6">
+      <header className="bg-white/10 backdrop-blur-lg shadow-2xl">
+        <div className="max-w-6xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-white mb-1">🍽️ 时令健康食谱</h1>
-              <p className="text-white/80 text-sm">{formatDate()}</p>
+              <h1 className="text-4xl font-bold text-white mb-2">🍽️ 时令健康食谱</h1>
+              <p className="text-white/90 text-lg">{formatDate()}</p>
             </div>
-            <div className={`px-4 py-2 bg-gradient-to-r ${fruit.color} rounded-full text-white text-sm font-medium animate-float`}>
-              {fruit.emoji} {fruit.name}
+            <div className={`px-6 py-3 bg-gradient-to-r ${fruit.color} rounded-full text-white text-base font-semibold shadow-lg animate-float`}>
+              {fruit.emoji} 时令：{fruit.name}
             </div>
           </div>
         </div>
       </header>
 
       {/* 营养总览 */}
-      <section className="max-w-4xl mx-auto px-4 mt-6">
-        <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-xl">
-          <div className="flex items-center justify-between">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">{totalCalories}</div>
-              <div className="text-xs text-gray-500">总热量</div>
+      <section className="max-w-6xl mx-auto px-6 mt-8">
+        <div className="bg-white/95 backdrop-blur-lg rounded-3xl p-8 shadow-2xl">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">📊 今日营养总览</h2>
+          <div className="grid grid-cols-3 gap-6">
+            <div className="text-center p-6 bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl">
+              <div className="text-4xl font-bold text-orange-600 mb-2">{totalCalories}</div>
+              <div className="text-sm text-gray-600">总热量 (大卡)</div>
             </div>
-            <div className="h-10 w-px bg-gray-200"></div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">3</div>
-              <div className="text-xs text-gray-500">餐</div>
+            <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl">
+              <div className="text-4xl font-bold text-blue-600 mb-2">3</div>
+              <div className="text-sm text-gray-600">营养餐食</div>
             </div>
-            <div className="h-10 w-px bg-gray-200"></div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">均衡</div>
-              <div className="text-xs text-gray-500">营养</div>
+            <div className="text-center p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl">
+              <div className="text-4xl font-bold text-green-600 mb-2">均衡</div>
+              <div className="text-sm text-gray-600">营养搭配</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* 三餐卡片 */}
-      <section className="max-w-4xl mx-auto px-4 mt-6">
-        <div className="grid gap-4">
+      <section className="max-w-6xl mx-auto px-6 mt-8">
+        <h2 className="text-3xl font-bold text-white text-center mb-8">🍴 今日三餐</h2>
+        <div className="grid md:grid-cols-3 gap-6">
           <MealCard type="breakfast" recipe={recipes.breakfast} onClick={() => handleMealClick(recipes.breakfast)} />
           <MealCard type="lunch" recipe={recipes.lunch} onClick={() => handleMealClick(recipes.lunch)} />
           <MealCard type="dinner" recipe={recipes.dinner} onClick={() => handleMealClick(recipes.dinner)} />
@@ -238,7 +247,7 @@ function App() {
       {selectedMeal && <Modal recipe={selectedMeal} onClose={handleCloseModal} />}
 
       {/* 页脚 */}
-      <footer className="max-w-4xl mx-auto px-4 mt-12 text-center text-white/60 text-sm">
+      <footer className="max-w-6xl mx-auto px-6 mt-16 text-center text-white/80 text-lg">
         <p>🌟 每日更新时令健康食谱，让健康成为一种习惯</p>
       </footer>
     </div>
