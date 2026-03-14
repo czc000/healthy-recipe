@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { createRoot } from 'react-dom/client';
 
 // 时令水果数据
@@ -36,29 +36,30 @@ const recipes = {
   ]
 };
 
-// 获取今日食谱
-function getDailyRecipes() {
+// 获取今日食谱（使用 useMemo 优化）
+const getDailyRecipes = () => {
   const today = new Date();
   const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
-  return {
+  
+  return useMemo(() => ({
     breakfast: recipes.breakfast[dayOfYear % recipes.breakfast.length],
     lunch: recipes.lunch[(dayOfYear + 1) % recipes.lunch.length],
     dinner: recipes.dinner[(dayOfYear + 2) % recipes.dinner.length]
-  };
-}
+  }), [dayOfYear]);
+};
 
 // 获取时令水果
-function getSeasonalFruit() {
+const getSeasonalFruit = () => {
   return seasonalFruits[new Date().getMonth() + 1];
-}
+};
 
 // 格式化日期
-function formatDate() {
+const formatDate = () => {
   return new Date().toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'long' });
-}
+};
 
-// 餐食卡片组件
-const MealCard = ({ type, recipe, onClick }) => {
+// 餐食卡片组件（使用 useCallback 优化）
+const MealCard = React.memo(({ type, recipe, onClick }) => {
   const colors = {
     breakfast: { bg: 'from-yellow-400 to-orange-400', icon: '🌅', label: '早餐' },
     lunch: { bg: 'from-green-400 to-emerald-500', icon: '☀️', label: '午餐' },
@@ -67,7 +68,14 @@ const MealCard = ({ type, recipe, onClick }) => {
   const c = colors[type];
 
   return (
-    <div onClick={onClick} className="meal-card bg-white rounded-2xl overflow-hidden shadow-xl">
+    <div 
+      onClick={onClick} 
+      className="meal-card bg-white rounded-2xl overflow-hidden shadow-xl cursor-pointer hover:shadow-2xl transition-shadow duration-300"
+      role="button"
+      tabIndex={0}
+      onKeyPress={(e) => e.key === 'Enter' && onClick()}
+      aria-label={`查看${c.label}${recipe.name}详情`}
+    >
       <div className={`bg-gradient-to-r ${c.bg} p-4 text-white`}>
         <div className="flex items-center justify-between">
           <h3 className="text-xl font-bold">{c.icon} {c.label}</h3>
@@ -93,14 +101,14 @@ const MealCard = ({ type, recipe, onClick }) => {
       </div>
     </div>
   );
-};
+});
 
 // 详情弹窗组件
 const Modal = ({ recipe, onClose }) => {
   if (!recipe) return null;
 
   return (
-    <div onClick={onClose} className="modal-overlay fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+    <div onClick={onClose} className="modal-overlay fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
       <div onClick={e => e.stopPropagation()} className="bg-white rounded-2xl max-w-lg w-full max-h-[80vh] overflow-y-auto">
         <div className="sticky top-0 bg-gradient-to-r from-purple-500 to-indigo-500 p-6 text-white">
           <h2 className="text-2xl font-bold">{recipe.name}</h2>
@@ -146,7 +154,7 @@ const Modal = ({ recipe, onClose }) => {
   );
 };
 
-// 主应用
+// 主应用组件
 function App() {
   const [recipes, setRecipes] = useState(null);
   const [fruit, setFruit] = useState(null);
@@ -155,6 +163,14 @@ function App() {
   useEffect(() => {
     setRecipes(getDailyRecipes());
     setFruit(getSeasonalFruit());
+  }, []);
+
+  const handleMealClick = useCallback((meal) => {
+    setSelectedMeal(meal);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setSelectedMeal(null);
   }, []);
 
   if (!recipes || !fruit) {
@@ -212,21 +228,25 @@ function App() {
       {/* 三餐卡片 */}
       <section className="max-w-4xl mx-auto px-4 mt-6">
         <div className="grid gap-4">
-          <MealCard type="breakfast" recipe={recipes.breakfast} onClick={() => setSelectedMeal(recipes.breakfast)} />
-          <MealCard type="lunch" recipe={recipes.lunch} onClick={() => setSelectedMeal(recipes.lunch)} />
-          <MealCard type="dinner" recipe={recipes.dinner} onClick={() => setSelectedMeal(recipes.dinner)} />
+          <MealCard type="breakfast" recipe={recipes.breakfast} onClick={() => handleMealClick(recipes.breakfast)} />
+          <MealCard type="lunch" recipe={recipes.lunch} onClick={() => handleMealClick(recipes.lunch)} />
+          <MealCard type="dinner" recipe={recipes.dinner} onClick={() => handleMealClick(recipes.dinner)} />
         </div>
       </section>
 
       {/* 弹窗 */}
-      {selectedMeal && <Modal recipe={selectedMeal} onClose={() => setSelectedMeal(null)} />}
+      {selectedMeal && <Modal recipe={selectedMeal} onClose={handleCloseModal} />}
 
       {/* 页脚 */}
       <footer className="max-w-4xl mx-auto px-4 mt-12 text-center text-white/60 text-sm">
-        <p>🌟 每日更新，让健康成为一种习惯</p>
+        <p>🌟 每日更新时令健康食谱，让健康成为一种习惯</p>
       </footer>
     </div>
   );
 }
+
+// 渲染
+const root = createRoot(document.getElementById('root'));
+root.render(<App />);
 
 export default App;
