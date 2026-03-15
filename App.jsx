@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 
 // ============================================================================
-// 数据层（可移至独立文件）
+// 数据层
 // ============================================================================
 
 const seasonalFruits = {
@@ -20,6 +20,7 @@ const seasonalFruits = {
   12: { name: '柚子', emoji: '🍊', color: 'from-yellow-400 to-orange-400' }
 };
 
+// 菜品数据 - 使用 emoji 和配色方案代替图片
 const recipes = {
   breakfast: [
     { 
@@ -28,7 +29,8 @@ const recipes = {
       calories: 350, 
       time: '10 分钟', 
       tags: ['低脂', '高纤维'], 
-      image: 'https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=800&h=600&fit=crop',
+      emoji: '🥣',
+      color: 'from-amber-100 to-orange-100',
       ingredients: ['燕麦片 50g', '时令水果 100g', '牛奶 200ml', '蜂蜜 1 勺', '坚果 15g'], 
       steps: ['燕麦片加入牛奶煮熟', '加入切好的时令水果', '淋上蜂蜜，撒上坚果'] 
     },
@@ -38,7 +40,8 @@ const recipes = {
       calories: 380, 
       time: '15 分钟', 
       tags: ['高蛋白'], 
-      image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=800&h=600&fit=crop',
+      emoji: '🥪',
+      color: 'from-yellow-100 to-amber-100',
       ingredients: ['全麦面包 2 片', '鸡蛋 1 个', '生菜 2 片', '番茄 1 个', '时令水果 100g'], 
       steps: ['鸡蛋煎熟', '面包烤至微黄', '依次放入生菜、番茄、鸡蛋', '搭配时令水果'] 
     },
@@ -48,7 +51,8 @@ const recipes = {
       calories: 320, 
       time: '5 分钟', 
       tags: ['益生菌'], 
-      image: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=800&h=600&fit=crop',
+      emoji: '🥛',
+      color: 'from-blue-100 to-indigo-100',
       ingredients: ['希腊酸奶 200g', '时令水果 150g', '格兰诺拉麦片 30g', '奇亚籽 1 勺'], 
       steps: ['酸奶倒入碗中', '加入切好的时令水果', '撒上麦片和奇亚籽'] 
     }
@@ -60,7 +64,8 @@ const recipes = {
       calories: 450, 
       time: '25 分钟', 
       tags: ['低 GI', '高蛋白'], 
-      image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&h=600&fit=crop',
+      emoji: '🥗',
+      color: 'from-green-100 to-emerald-100',
       ingredients: ['藜麦 80g', '鸡胸肉 100g', '混合蔬菜 150g', '时令水果 100g', '橄榄油 1 勺'], 
       steps: ['藜麦煮熟晾凉', '鸡胸肉煎熟切块', '混合蔬菜铺底', '放入藜麦和鸡肉', '淋上橄榄油'] 
     },
@@ -70,7 +75,8 @@ const recipes = {
       calories: 380, 
       time: '30 分钟', 
       tags: ['低脂', 'Omega-3'], 
-      image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&h=600&fit=crop',
+      emoji: '🐟',
+      color: 'from-cyan-100 to-blue-100',
       ingredients: ['鲈鱼 150g', '西兰花 100g', '胡萝卜 50g', '姜葱适量', '时令水果 100g'], 
       steps: ['鱼处理干净', '放上姜葱蒸 10 分钟', '蔬菜焯水', '淋上蒸鱼豉油'] 
     },
@@ -80,7 +86,8 @@ const recipes = {
       calories: 420, 
       time: '20 分钟', 
       tags: ['高纤维'], 
-      image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=800&h=600&fit=crop',
+      emoji: '🍚',
+      color: 'from-orange-100 to-red-100',
       ingredients: ['糙米饭 150g', '鸡蛋 1 个', '混合蔬菜 150g', '虾仁 50g', '时令水果 100g'], 
       steps: ['糙米饭提前煮好', '鸡蛋炒散', '加入蔬菜和虾仁翻炒', '放入米饭炒匀'] 
     }
@@ -92,7 +99,8 @@ const recipes = {
       calories: 320, 
       time: '30 分钟', 
       tags: ['素食', '低卡'], 
-      image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800&h=600&fit=crop',
+      emoji: '🥦',
+      color: 'from-green-100 to-teal-100',
       ingredients: ['嫩豆腐 150g', '混合蔬菜 200g', '橄榄油 1 勺', '香草适量', '时令水果 100g'], 
       steps: ['豆腐切块', '蔬菜切块', '放入烤箱 200 度烤 20 分钟', '撒上香草'] 
     },
@@ -102,7 +110,8 @@ const recipes = {
       calories: 350, 
       time: '20 分钟', 
       tags: ['暖胃'], 
-      image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=800&h=600&fit=crop',
+      emoji: '🍜',
+      color: 'from-red-100 to-pink-100',
       ingredients: ['全麦面条 60g', '番茄 2 个', '鸡蛋 1 个', '青菜 50g', '时令水果 100g'], 
       steps: ['番茄炒出汁', '加水煮开', '下面条', '打入蛋花', '放入青菜'] 
     },
@@ -112,7 +121,8 @@ const recipes = {
       calories: 300, 
       time: '25 分钟', 
       tags: ['低卡', '高蛋白'], 
-      image: 'https://images.unsplash.com/photo-1626804475297-411dbe66f3eb?w=800&h=600&fit=crop',
+      emoji: '🥚',
+      color: 'from-yellow-100 to-orange-100',
       ingredients: ['鸡蛋 2 个', '西兰花 100g', '胡萝卜 50g', '虾仁 50g', '时令水果 100g'], 
       steps: ['鸡蛋打散加温水', '放入虾仁蒸 8 分钟', '蔬菜焯水', '淋上生抽'] 
     }
@@ -147,12 +157,12 @@ const formatDate = () => new Date().toLocaleDateString('zh-CN', {
 
 // 营养信息标签
 const NutritionBadge = ({ calories, time }) => (
-  <div className="flex items-center justify-between text-sm" aria-label={`热量${calories}大卡，制作时间${time}`}>
-    <span className="flex items-center text-orange-600" aria-label={`${calories}大卡`}>
-      <span className="mr-1" aria-hidden="true">🔥</span> {calories}大卡
+  <div className="flex items-center justify-between text-sm">
+    <span className="flex items-center text-orange-600 font-medium">
+      <span className="mr-1.5">🔥</span> {calories}大卡
     </span>
-    <span className="flex items-center text-blue-600" aria-label={`${time}完成`}>
-      <span className="mr-1" aria-hidden="true">⏱️</span> {time}
+    <span className="flex items-center text-blue-600 font-medium">
+      <span className="mr-1.5">⏱️</span> {time}
     </span>
   </div>
 );
@@ -160,11 +170,21 @@ const NutritionBadge = ({ calories, time }) => (
 // 时令水果标签
 const SeasonalFruitBadge = ({ fruit }) => (
   <div 
-    className={`px-6 py-3 bg-gradient-to-r ${fruit.color} rounded-full text-white text-base font-semibold shadow-lg animate-float`}
+    className={`px-5 py-2.5 bg-gradient-to-r ${fruit.color} rounded-full text-white text-sm font-semibold shadow-lg hover:shadow-xl transition-shadow`}
     role="status"
-    aria-label={`本月份时令水果：${fruit.name}`}
   >
-    <span aria-hidden="true">{fruit.emoji}</span> 时令：{fruit.name}
+    <span className="mr-2">{fruit.emoji}</span> 时令：{fruit.name}
+  </div>
+);
+
+// 菜品图片区域（使用 emoji + 渐变色背景）
+const DishImage = ({ emoji, color, name }) => (
+  <div className={`h-48 bg-gradient-to-br ${color} flex items-center justify-center relative overflow-hidden`}>
+    <div className="absolute inset-0 bg-black/5"></div>
+    <span className="text-8xl relative z-10 transform hover:scale-110 transition-transform duration-300" role="img" aria-label={name}>
+      {emoji}
+    </span>
+    <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/20 to-transparent"></div>
   </div>
 );
 
@@ -183,32 +203,27 @@ const MealCard = React.memo(({ type, recipe, onClick }) => {
       onKeyDown={(e) => e.key === 'Enter' && onClick()}
       role="button"
       tabIndex={0}
-      className={`meal-card bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer transform ${c.accent} border-t-4`}
+      className={`meal-card bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer transform hover:-translate-y-2 transition-all duration-300 ${c.accent} border-t-4`}
       aria-label={`查看${c.label}：${recipe.name}`}
     >
-      {/* 菜品图片 */}
-      <div className="relative h-48 overflow-hidden">
-        <img 
-          src={recipe.image} 
-          alt={recipe.name}
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-          loading="lazy"
-        />
+      {/* 菜品图片区域 */}
+      <div className="relative">
+        <DishImage emoji={recipe.emoji} color={recipe.color} name={recipe.name} />
         <div className="absolute top-3 right-3">
-          <span className={`px-3 py-1 bg-white/95 backdrop-blur-sm rounded-full text-xs font-bold text-gray-700 shadow-lg`}>
+          <span className="px-3 py-1.5 bg-white/95 backdrop-blur-sm rounded-full text-xs font-bold text-gray-700 shadow-lg">
             {c.icon} {c.label}
           </span>
         </div>
       </div>
       
-      <div className="p-6">
-        <h4 className="text-xl font-bold text-gray-800 mb-3">{recipe.name}</h4>
+      <div className="p-5">
+        <h4 className="text-lg font-bold text-gray-800 mb-3 line-clamp-1">{recipe.name}</h4>
         <NutritionBadge calories={recipe.calories} time={recipe.time} />
         <div className="flex flex-wrap gap-2 mt-4">
           {recipe.tags.map((tag, i) => (
             <span 
               key={i} 
-              className="px-3 py-1 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 rounded-full text-xs font-medium"
+              className="px-2.5 py-1 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 rounded-full text-xs font-medium"
             >
               {tag}
             </span>
@@ -221,16 +236,13 @@ const MealCard = React.memo(({ type, recipe, onClick }) => {
 
 MealCard.displayName = 'MealCard';
 
-// 详情弹窗组件（优化可访问性）
+// 详情弹窗组件
 const Modal = ({ recipe, onClose }) => {
-  // ESC 键关闭
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === 'Escape') onClose();
     };
     document.addEventListener('keydown', handleEsc);
-    
-    // 锁定背景滚动
     document.body.classList.add('modal-open');
     
     return () => {
@@ -239,7 +251,6 @@ const Modal = ({ recipe, onClose }) => {
     };
   }, [onClose]);
 
-  // 焦点管理 - 简单实现
   useEffect(() => {
     const modalContent = document.querySelector('[role="dialog"]');
     if (modalContent) {
@@ -262,19 +273,15 @@ const Modal = ({ recipe, onClose }) => {
         className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-slideUp"
         role="document"
       >
-        {/* 菜品大图 */}
-        <div className="relative h-64 sm:h-72 overflow-hidden rounded-t-3xl">
-          <img 
-            src={recipe.image} 
-            alt={recipe.name}
-            className="w-full h-full object-cover"
-          />
+        {/* 菜品大图区域 */}
+        <div className="relative rounded-t-3xl overflow-hidden">
+          <DishImage emoji={recipe.emoji} color={recipe.color} name={recipe.name} />
           <button 
             onClick={onClose}
-            className="absolute top-4 right-4 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 shadow-lg"
+            className="absolute top-4 right-4 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 shadow-lg text-xl"
             aria-label="关闭详情"
           >
-            <span aria-hidden="true">✕</span>
+            ✕
           </button>
         </div>
         
@@ -285,10 +292,10 @@ const Modal = ({ recipe, onClose }) => {
             <h2 id="modal-title" className="text-2xl sm:text-3xl font-bold text-gray-800 mb-3">{recipe.name}</h2>
             <div className="flex items-center gap-6 text-sm">
               <span className="flex items-center text-orange-600 font-medium">
-                <span className="mr-2 text-xl" aria-hidden="true">🔥</span> {recipe.calories}大卡
+                <span className="mr-2 text-xl">🔥</span> {recipe.calories}大卡
               </span>
               <span className="flex items-center text-blue-600 font-medium">
-                <span className="mr-2 text-xl" aria-hidden="true">⏱️</span> {recipe.time}
+                <span className="mr-2 text-xl">⏱️</span> {recipe.time}
               </span>
             </div>
           </div>
@@ -296,12 +303,12 @@ const Modal = ({ recipe, onClose }) => {
           {/* 食材准备 */}
           <div className="mb-8">
             <h3 className="font-bold text-gray-800 mb-4 flex items-center text-lg">
-              <span className="mr-3 text-2xl" aria-hidden="true">🛒</span> 食材准备
+              <span className="mr-3 text-2xl">🛒</span> 食材准备
             </h3>
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-3" role="list">
               {recipe.ingredients.map((item, i) => (
                 <li key={i} className="flex items-center p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl">
-                  <span className="w-3 h-3 bg-green-500 rounded-full mr-3 flex-shrink-0" aria-hidden="true"></span>
+                  <span className="w-3 h-3 bg-green-500 rounded-full mr-3 flex-shrink-0"></span>
                   <span className="text-gray-700">{item}</span>
                 </li>
               ))}
@@ -311,7 +318,7 @@ const Modal = ({ recipe, onClose }) => {
           {/* 烹饪步骤 */}
           <div>
             <h3 className="font-bold text-gray-800 mb-4 flex items-center text-lg">
-              <span className="mr-3 text-2xl" aria-hidden="true">👨‍🍳</span> 烹饪步骤
+              <span className="mr-3 text-2xl">👨‍🍳</span> 烹饪步骤
             </h3>
             <ol className="space-y-4" role="list">
               {recipe.steps.map((step, i) => (
@@ -340,7 +347,6 @@ const Modal = ({ recipe, onClose }) => {
 function App() {
   const [selectedMeal, setSelectedMeal] = useState(null);
   
-  // 使用 useMemo 缓存计算结果
   const dailyData = useMemo(() => ({
     recipes: getDailyRecipes(),
     fruit: getSeasonalFruit()
