@@ -1,7 +1,10 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 
-// 时令水果数据
+// ============================================================================
+// 数据层（可移至独立文件）
+// ============================================================================
+
 const seasonalFruits = {
   1: { name: '柑橘', emoji: '🍊', color: 'from-orange-400 to-orange-500' },
   2: { name: '草莓', emoji: '🍓', color: 'from-pink-400 to-red-500' },
@@ -17,7 +20,6 @@ const seasonalFruits = {
   12: { name: '柚子', emoji: '🍊', color: 'from-yellow-400 to-orange-400' }
 };
 
-// 食谱数据
 const recipes = {
   breakfast: [
     { id: 1, name: '燕麦水果粥', calories: 350, time: '10 分钟', tags: ['低脂', '高纤维'], ingredients: ['燕麦片 50g', '时令水果 100g', '牛奶 200ml', '蜂蜜 1 勺', '坚果 15g'], steps: ['燕麦片加入牛奶煮熟', '加入切好的时令水果', '淋上蜂蜜，撒上坚果'] },
@@ -36,7 +38,10 @@ const recipes = {
   ]
 };
 
-// 获取今日食谱
+// ============================================================================
+// 工具函数
+// ============================================================================
+
 const getDailyRecipes = () => {
   const today = new Date();
   const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
@@ -47,11 +52,40 @@ const getDailyRecipes = () => {
   };
 };
 
-// 获取时令水果
 const getSeasonalFruit = () => seasonalFruits[new Date().getMonth() + 1];
 
-// 格式化日期
-const formatDate = () => new Date().toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'long' });
+const formatDate = () => new Date().toLocaleDateString('zh-CN', { 
+  month: 'long', 
+  day: 'numeric', 
+  weekday: 'long' 
+});
+
+// ============================================================================
+// 可复用组件
+// ============================================================================
+
+// 营养信息标签
+const NutritionBadge = ({ calories, time }) => (
+  <div className="flex items-center justify-between text-sm" aria-label={`热量${calories}大卡，制作时间${time}`}>
+    <span className="flex items-center text-orange-600" aria-label={`${calories}大卡`}>
+      <span className="mr-1" aria-hidden="true">🔥</span> {calories}大卡
+    </span>
+    <span className="flex items-center text-blue-600" aria-label={`${time}完成`}>
+      <span className="mr-1" aria-hidden="true">⏱️</span> {time}
+    </span>
+  </div>
+);
+
+// 时令水果标签
+const SeasonalFruitBadge = ({ fruit }) => (
+  <div 
+    className={`px-6 py-3 bg-gradient-to-r ${fruit.color} rounded-full text-white text-base font-semibold shadow-lg animate-float`}
+    role="status"
+    aria-label={`本月份时令水果：${fruit.name}`}
+  >
+    <span aria-hidden="true">{fruit.emoji}</span> 时令：{fruit.name}
+  </div>
+);
 
 // 餐食卡片组件
 const MealCard = React.memo(({ type, recipe, onClick }) => {
@@ -65,11 +99,11 @@ const MealCard = React.memo(({ type, recipe, onClick }) => {
   return (
     <div 
       onClick={onClick} 
-      className={`meal-card bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:-translate-y-2 ${c.accent} border-t-4`}
+      onKeyDown={(e) => e.key === 'Enter' && onClick()}
       role="button"
       tabIndex={0}
-      onKeyPress={(e) => e.key === 'Enter' && onClick()}
-      aria-label={`查看${c.label}${recipe.name}详情`}
+      className={`meal-card bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer transform ${c.accent} border-t-4`}
+      aria-label={`查看${c.label}：${recipe.name}`}
     >
       <div className={`bg-gradient-to-r ${c.bg} p-6 text-white`}>
         <div className="flex items-center justify-between">
@@ -77,22 +111,18 @@ const MealCard = React.memo(({ type, recipe, onClick }) => {
             <h3 className="text-2xl font-bold">{c.icon} {c.label}</h3>
             <p className="text-sm opacity-90 mt-1">点击查看详情</p>
           </div>
-          <span className="text-5xl">{c.icon}</span>
+          <span className="text-5xl" aria-hidden="true">{c.icon}</span>
         </div>
       </div>
       <div className="p-6">
         <h4 className="text-xl font-bold text-gray-800 mb-3">{recipe.name}</h4>
-        <div className="flex items-center justify-between text-sm mb-4">
-          <span className="flex items-center text-orange-600">
-            <span className="mr-1">🔥</span> {recipe.calories}大卡
-          </span>
-          <span className="flex items-center text-blue-600">
-            <span className="mr-1">⏱️</span> {recipe.time}
-          </span>
-        </div>
-        <div className="flex flex-wrap gap-2">
+        <NutritionBadge calories={recipe.calories} time={recipe.time} />
+        <div className="flex flex-wrap gap-2 mt-4">
           {recipe.tags.map((tag, i) => (
-            <span key={i} className="px-3 py-1 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 rounded-full text-xs font-medium">
+            <span 
+              key={i} 
+              className="px-3 py-1 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 rounded-full text-xs font-medium"
+            >
               {tag}
             </span>
           ))}
@@ -102,58 +132,98 @@ const MealCard = React.memo(({ type, recipe, onClick }) => {
   );
 });
 
-// 详情弹窗组件
+MealCard.displayName = 'MealCard';
+
+// 详情弹窗组件（优化可访问性）
 const Modal = ({ recipe, onClose }) => {
+  // ESC 键关闭
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleEsc);
+    
+    // 锁定背景滚动
+    document.body.classList.add('modal-open');
+    
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+      document.body.classList.remove('modal-open');
+    };
+  }, [onClose]);
+
+  // 焦点管理 - 简单实现
+  useEffect(() => {
+    const modalContent = document.querySelector('[role="dialog"]');
+    if (modalContent) {
+      modalContent.focus();
+    }
+  }, []);
+
   if (!recipe) return null;
 
   return (
-    <div onClick={onClose} className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn" role="dialog" aria-modal="true">
+    <div 
+      onClick={onClose} 
+      className="fixed inset-0 bg-black/60 modal-overlay z-50 flex items-center justify-center p-4 animate-fadeIn"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
       <div 
         onClick={e => e.stopPropagation()} 
         className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-slideUp"
+        role="document"
       >
+        {/* 头部 */}
         <div className="sticky top-0 bg-gradient-to-r from-purple-500 to-indigo-500 p-8 text-white">
           <button 
             onClick={onClose}
-            className="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors"
-            aria-label="关闭"
+            className="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-white/50"
+            aria-label="关闭详情"
           >
-            ✕
+            <span aria-hidden="true">✕</span>
           </button>
-          <h2 className="text-3xl font-bold">{recipe.name}</h2>
+          <h2 id="modal-title" className="text-3xl font-bold">{recipe.name}</h2>
           <div className="flex items-center gap-6 mt-4 text-sm">
             <span className="flex items-center">
-              <span className="mr-2 text-xl">🔥</span> {recipe.calories}大卡
+              <span className="mr-2 text-xl" aria-hidden="true">🔥</span> {recipe.calories}大卡
             </span>
             <span className="flex items-center">
-              <span className="mr-2 text-xl">⏱️</span> {recipe.time}
+              <span className="mr-2 text-xl" aria-hidden="true">⏱️</span> {recipe.time}
             </span>
           </div>
         </div>
         
+        {/* 内容区 */}
         <div className="p-8">
+          {/* 食材准备 */}
           <div className="mb-8">
             <h3 className="font-bold text-gray-800 mb-4 flex items-center text-lg">
-              <span className="mr-3 text-2xl">🛒</span> 食材准备
+              <span className="mr-3 text-2xl" aria-hidden="true">🛒</span> 食材准备
             </h3>
-            <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <ul className="grid grid-cols-1 md:grid-cols-2 gap-3" role="list">
               {recipe.ingredients.map((item, i) => (
                 <li key={i} className="flex items-center p-3 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl">
-                  <span className="w-3 h-3 bg-green-500 rounded-full mr-3 flex-shrink-0"></span>
+                  <span className="w-3 h-3 bg-green-500 rounded-full mr-3 flex-shrink-0" aria-hidden="true"></span>
                   <span className="text-gray-700">{item}</span>
                 </li>
               ))}
             </ul>
           </div>
 
+          {/* 烹饪步骤 */}
           <div>
             <h3 className="font-bold text-gray-800 mb-4 flex items-center text-lg">
-              <span className="mr-3 text-2xl">👨‍🍳</span> 烹饪步骤
+              <span className="mr-3 text-2xl" aria-hidden="true">👨‍🍳</span> 烹饪步骤
             </h3>
-            <ol className="space-y-4">
+            <ol className="space-y-4" role="list">
               {recipe.steps.map((step, i) => (
                 <li key={i} className="flex">
-                  <span className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-purple-400 to-indigo-500 text-white rounded-full text-sm font-bold flex items-center justify-center mr-4 shadow-lg">
+                  <span 
+                    className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-purple-400 to-indigo-500 text-white rounded-full text-sm font-bold flex items-center justify-center mr-4 shadow-lg"
+                    aria-label={`步骤 ${i + 1}`}
+                  >
                     {i + 1}
                   </span>
                   <span className="text-gray-700 pt-1.5 leading-relaxed">{step}</span>
@@ -167,7 +237,10 @@ const Modal = ({ recipe, onClose }) => {
   );
 };
 
+// ============================================================================
 // 主应用组件
+// ============================================================================
+
 function App() {
   const [selectedMeal, setSelectedMeal] = useState(null);
   
@@ -185,65 +258,89 @@ function App() {
   const totalCalories = recipes.breakfast.calories + recipes.lunch.calories + recipes.dinner.calories;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-500 via-indigo-500 to-purple-600 pb-16">
+    <div className="min-h-screen pb-16">
       {/* 头部 */}
       <header className="bg-white/10 backdrop-blur-lg shadow-2xl">
         <div className="max-w-6xl mx-auto px-6 py-8">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h1 className="text-4xl font-bold text-white mb-2">🍽️ 时令健康食谱</h1>
-              <p className="text-white/90 text-lg">{formatDate()}</p>
+              <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+                🍽️ 时令健康食谱
+              </h1>
+              <p className="text-white/90 text-base sm:text-lg">{formatDate()}</p>
             </div>
-            <div className={`px-6 py-3 bg-gradient-to-r ${fruit.color} rounded-full text-white text-base font-semibold shadow-lg animate-float`}>
-              {fruit.emoji} 时令：{fruit.name}
-            </div>
+            <SeasonalFruitBadge fruit={fruit} />
           </div>
         </div>
       </header>
 
-      {/* 营养总览 */}
-      <section className="max-w-6xl mx-auto px-6 mt-8">
-        <div className="bg-white/95 backdrop-blur-lg rounded-3xl p-8 shadow-2xl">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">📊 今日营养总览</h2>
-          <div className="grid grid-cols-3 gap-6">
-            <div className="text-center p-6 bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl">
-              <div className="text-4xl font-bold text-orange-600 mb-2">{totalCalories}</div>
-              <div className="text-sm text-gray-600">总热量 (大卡)</div>
-            </div>
-            <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl">
-              <div className="text-4xl font-bold text-blue-600 mb-2">3</div>
-              <div className="text-sm text-gray-600">营养餐食</div>
-            </div>
-            <div className="text-center p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl">
-              <div className="text-4xl font-bold text-green-600 mb-2">均衡</div>
-              <div className="text-sm text-gray-600">营养搭配</div>
+      {/* 主要内容区 */}
+      <main id="main-content">
+        {/* 营养总览 */}
+        <section className="max-w-6xl mx-auto px-6 mt-8 sm:mt-12" aria-label="今日营养总览">
+          <div className="bg-white/95 backdrop-blur-lg rounded-3xl p-6 sm:p-8 shadow-2xl">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6 text-center">
+              📊 今日营养总览
+            </h2>
+            <div className="grid grid-cols-3 gap-4 sm:gap-6">
+              <div className="text-center p-4 sm:p-6 bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl">
+                <div className="text-3xl sm:text-4xl font-bold text-orange-600 mb-2">
+                  {totalCalories}
+                </div>
+                <div className="text-xs sm:text-sm text-gray-600">总热量 (大卡)</div>
+              </div>
+              <div className="text-center p-4 sm:p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl">
+                <div className="text-3xl sm:text-4xl font-bold text-blue-600 mb-2">3</div>
+                <div className="text-xs sm:text-sm text-gray-600">营养餐食</div>
+              </div>
+              <div className="text-center p-4 sm:p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl">
+                <div className="text-3xl sm:text-4xl font-bold text-green-600 mb-2">均衡</div>
+                <div className="text-xs sm:text-sm text-gray-600">营养搭配</div>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* 三餐卡片 */}
-      <section className="max-w-6xl mx-auto px-6 mt-8">
-        <h2 className="text-3xl font-bold text-white text-center mb-8">🍴 今日三餐</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          <MealCard type="breakfast" recipe={recipes.breakfast} onClick={() => handleMealClick(recipes.breakfast)} />
-          <MealCard type="lunch" recipe={recipes.lunch} onClick={() => handleMealClick(recipes.lunch)} />
-          <MealCard type="dinner" recipe={recipes.dinner} onClick={() => handleMealClick(recipes.dinner)} />
-        </div>
-      </section>
+        {/* 三餐卡片 */}
+        <section className="max-w-6xl mx-auto px-6 mt-8 sm:mt-12" aria-label="今日三餐">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-8">
+            🍴 今日三餐
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <MealCard 
+              type="breakfast" 
+              recipe={recipes.breakfast} 
+              onClick={() => handleMealClick(recipes.breakfast)} 
+            />
+            <MealCard 
+              type="lunch" 
+              recipe={recipes.lunch} 
+              onClick={() => handleMealClick(recipes.lunch)} 
+            />
+            <MealCard 
+              type="dinner" 
+              recipe={recipes.dinner} 
+              onClick={() => handleMealClick(recipes.dinner)} 
+            />
+          </div>
+        </section>
+      </main>
 
       {/* 弹窗 */}
       {selectedMeal && <Modal recipe={selectedMeal} onClose={handleCloseModal} />}
 
       {/* 页脚 */}
-      <footer className="max-w-6xl mx-auto px-6 mt-16 text-center text-white/80 text-lg">
+      <footer className="max-w-6xl mx-auto px-6 mt-12 sm:mt-16 text-center text-white/80 text-base sm:text-lg">
         <p>🌟 每日更新时令健康食谱，让健康成为一种习惯</p>
       </footer>
     </div>
   );
 }
 
-// 渲染
+// ============================================================================
+// 应用入口
+// ============================================================================
+
 const root = createRoot(document.getElementById('root'));
 root.render(<App />);
 

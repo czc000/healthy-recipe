@@ -3,48 +3,172 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🍽️ 时令健康食谱</title>
     <meta name="description" content="每日更新时令健康食谱，一日三餐营养搭配">
+    <meta name="theme-color" content="#6366f1">
+    
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="🍽️ 时令健康食谱">
+    <meta property="og:description" content="每日更新时令健康食谱，一日三餐营养搭配">
+    <meta property="og:image" content="https://opengraph.githubassets.com/1/healthy-recipe">
+    
+    <!-- PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="健康食谱">
+    
+    <title>🍽️ 时令健康食谱</title>
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://esm.sh">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN for development) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      // 抑制 Tailwind CDN 警告
+      // Tailwind configuration
       window.tailwind = window.tailwind || {};
       window.tailwind.config = {
         theme: {
           extend: {
+            fontFamily: {
+              sans: ['Noto Sans SC', 'system-ui', 'sans-serif'],
+            },
+            colors: {
+              primary: {
+                50: '#eef2ff',
+                100: '#e0e7ff',
+                500: '#6366f1',
+                600: '#4f46e5',
+                700: '#4338ca',
+              },
+            },
             animation: {
               'float': 'float 3s ease-in-out infinite',
+              'fade-in': 'fadeIn 0.3s ease-out',
+              'slide-up': 'slideUp 0.4s ease-out',
+              'scale-in': 'scaleIn 0.2s ease-out',
             },
             keyframes: {
               float: {
                 '0%, 100%': { transform: 'translateY(0px)' },
                 '50%': { transform: 'translateY(-10px)' },
               },
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              slideUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              scaleIn: {
+                '0%': { opacity: '0', transform: 'scale(0.95)' },
+                '100%': { opacity: '1', transform: 'scale(1)' },
+              },
             },
           },
         },
       }
     </script>
+    
+    <!-- Base Styles -->
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+      /* Reset & Base */
       * { margin: 0; padding: 0; box-sizing: border-box; }
+      
+      html {
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
       body {
-        font-family: 'Noto Sans SC', sans-serif;
+        font-family: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
+        overflow-x: hidden;
       }
+      
+      /* Focus styles for accessibility */
+      *:focus-visible {
+        outline: 3px solid #fbbf24;
+        outline-offset: 2px;
+      }
+      
+      /* Skip to content link */
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: #1e293b;
+        color: white;
+        padding: 8px 16px;
+        z-index: 100;
+        transition: top 0.3s;
+      }
+      .skip-link:focus {
+        top: 0;
+      }
+      
+      /* Modal animations */
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      .animate-fadeIn {
+        animation: fadeIn 0.3s ease-out;
+      }
+      .animate-slideUp {
+        animation: slideUp 0.4s ease-out;
+      }
+      
+      /* Meal card interactions */
       .meal-card {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         cursor: pointer;
+        will-change: transform, box-shadow;
       }
       .meal-card:hover {
         transform: translateY(-8px);
         box-shadow: 0 25px 50px rgba(0,0,0,0.2);
       }
+      .meal-card:active {
+        transform: translateY(-4px) scale(0.98);
+      }
+      
+      /* Modal overlay */
       .modal-overlay {
         backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      
+      /* Prevent body scroll when modal is open */
+      body.modal-open {
+        overflow: hidden;
+      }
+      
+      /* Mobile optimizations */
+      @media (max-width: 640px) {
+        html {
+          font-size: 14px;
+        }
+        .meal-card:active {
+          transform: scale(0.98);
+        }
       }
     </style>
+    
+    <!-- Import Map for React -->
     <script type="importmap">
 {
   "imports": {
@@ -53,9 +177,12 @@
     "react/jsx-runtime": "https://esm.sh/react@19/jsx-runtime"
   }
 }
-</script>
+    </script>
   </head>
   <body>
+    <!-- Skip to content for accessibility -->
+    <a href="#main-content" class="skip-link">跳到主要内容</a>
+    
     <div id="root"></div>
     <script type="module" src="./dist/index.js"></script>
   </body>
