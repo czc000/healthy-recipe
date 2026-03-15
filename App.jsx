@@ -22,19 +22,100 @@ const seasonalFruits = {
 
 const recipes = {
   breakfast: [
-    { id: 1, name: '燕麦水果粥', calories: 350, time: '10 分钟', tags: ['低脂', '高纤维'], ingredients: ['燕麦片 50g', '时令水果 100g', '牛奶 200ml', '蜂蜜 1 勺', '坚果 15g'], steps: ['燕麦片加入牛奶煮熟', '加入切好的时令水果', '淋上蜂蜜，撒上坚果'] },
-    { id: 2, name: '全麦三明治', calories: 380, time: '15 分钟', tags: ['高蛋白'], ingredients: ['全麦面包 2 片', '鸡蛋 1 个', '生菜 2 片', '番茄 1 个', '时令水果 100g'], steps: ['鸡蛋煎熟', '面包烤至微黄', '依次放入生菜、番茄、鸡蛋', '搭配时令水果'] },
-    { id: 3, name: '酸奶水果碗', calories: 320, time: '5 分钟', tags: ['益生菌'], ingredients: ['希腊酸奶 200g', '时令水果 150g', '格兰诺拉麦片 30g', '奇亚籽 1 勺'], steps: ['酸奶倒入碗中', '加入切好的时令水果', '撒上麦片和奇亚籽'] }
+    { 
+      id: 1, 
+      name: '燕麦水果粥', 
+      calories: 350, 
+      time: '10 分钟', 
+      tags: ['低脂', '高纤维'], 
+      image: 'https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=800&h=600&fit=crop',
+      ingredients: ['燕麦片 50g', '时令水果 100g', '牛奶 200ml', '蜂蜜 1 勺', '坚果 15g'], 
+      steps: ['燕麦片加入牛奶煮熟', '加入切好的时令水果', '淋上蜂蜜，撒上坚果'] 
+    },
+    { 
+      id: 2, 
+      name: '全麦三明治', 
+      calories: 380, 
+      time: '15 分钟', 
+      tags: ['高蛋白'], 
+      image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=800&h=600&fit=crop',
+      ingredients: ['全麦面包 2 片', '鸡蛋 1 个', '生菜 2 片', '番茄 1 个', '时令水果 100g'], 
+      steps: ['鸡蛋煎熟', '面包烤至微黄', '依次放入生菜、番茄、鸡蛋', '搭配时令水果'] 
+    },
+    { 
+      id: 3, 
+      name: '酸奶水果碗', 
+      calories: 320, 
+      time: '5 分钟', 
+      tags: ['益生菌'], 
+      image: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=800&h=600&fit=crop',
+      ingredients: ['希腊酸奶 200g', '时令水果 150g', '格兰诺拉麦片 30g', '奇亚籽 1 勺'], 
+      steps: ['酸奶倒入碗中', '加入切好的时令水果', '撒上麦片和奇亚籽'] 
+    }
   ],
   lunch: [
-    { id: 1, name: '藜麦蔬菜沙拉', calories: 450, time: '25 分钟', tags: ['低 GI', '高蛋白'], ingredients: ['藜麦 80g', '鸡胸肉 100g', '混合蔬菜 150g', '时令水果 100g', '橄榄油 1 勺'], steps: ['藜麦煮熟晾凉', '鸡胸肉煎熟切块', '混合蔬菜铺底', '放入藜麦和鸡肉', '淋上橄榄油'] },
-    { id: 2, name: '清蒸鱼配时蔬', calories: 380, time: '30 分钟', tags: ['低脂', 'Omega-3'], ingredients: ['鲈鱼 150g', '西兰花 100g', '胡萝卜 50g', '姜葱适量', '时令水果 100g'], steps: ['鱼处理干净', '放上姜葱蒸 10 分钟', '蔬菜焯水', '淋上蒸鱼豉油'] },
-    { id: 3, name: '糙米蔬菜炒饭', calories: 420, time: '20 分钟', tags: ['高纤维'], ingredients: ['糙米饭 150g', '鸡蛋 1 个', '混合蔬菜 150g', '虾仁 50g', '时令水果 100g'], steps: ['糙米饭提前煮好', '鸡蛋炒散', '加入蔬菜和虾仁翻炒', '放入米饭炒匀'] }
+    { 
+      id: 1, 
+      name: '藜麦蔬菜沙拉', 
+      calories: 450, 
+      time: '25 分钟', 
+      tags: ['低 GI', '高蛋白'], 
+      image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&h=600&fit=crop',
+      ingredients: ['藜麦 80g', '鸡胸肉 100g', '混合蔬菜 150g', '时令水果 100g', '橄榄油 1 勺'], 
+      steps: ['藜麦煮熟晾凉', '鸡胸肉煎熟切块', '混合蔬菜铺底', '放入藜麦和鸡肉', '淋上橄榄油'] 
+    },
+    { 
+      id: 2, 
+      name: '清蒸鱼配时蔬', 
+      calories: 380, 
+      time: '30 分钟', 
+      tags: ['低脂', 'Omega-3'], 
+      image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&h=600&fit=crop',
+      ingredients: ['鲈鱼 150g', '西兰花 100g', '胡萝卜 50g', '姜葱适量', '时令水果 100g'], 
+      steps: ['鱼处理干净', '放上姜葱蒸 10 分钟', '蔬菜焯水', '淋上蒸鱼豉油'] 
+    },
+    { 
+      id: 3, 
+      name: '糙米蔬菜炒饭', 
+      calories: 420, 
+      time: '20 分钟', 
+      tags: ['高纤维'], 
+      image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=800&h=600&fit=crop',
+      ingredients: ['糙米饭 150g', '鸡蛋 1 个', '混合蔬菜 150g', '虾仁 50g', '时令水果 100g'], 
+      steps: ['糙米饭提前煮好', '鸡蛋炒散', '加入蔬菜和虾仁翻炒', '放入米饭炒匀'] 
+    }
   ],
   dinner: [
-    { id: 1, name: '烤蔬菜配豆腐', calories: 320, time: '30 分钟', tags: ['素食', '低卡'], ingredients: ['嫩豆腐 150g', '混合蔬菜 200g', '橄榄油 1 勺', '香草适量', '时令水果 100g'], steps: ['豆腐切块', '蔬菜切块', '放入烤箱 200 度烤 20 分钟', '撒上香草'] },
-    { id: 2, name: '番茄鸡蛋汤面', calories: 350, time: '20 分钟', tags: ['暖胃'], ingredients: ['全麦面条 60g', '番茄 2 个', '鸡蛋 1 个', '青菜 50g', '时令水果 100g'], steps: ['番茄炒出汁', '加水煮开', '下面条', '打入蛋花', '放入青菜'] },
-    { id: 3, name: '蒸蛋配时蔬', calories: 300, time: '25 分钟', tags: ['低卡', '高蛋白'], ingredients: ['鸡蛋 2 个', '西兰花 100g', '胡萝卜 50g', '虾仁 50g', '时令水果 100g'], steps: ['鸡蛋打散加温水', '放入虾仁蒸 8 分钟', '蔬菜焯水', '淋上生抽'] }
+    { 
+      id: 1, 
+      name: '烤蔬菜配豆腐', 
+      calories: 320, 
+      time: '30 分钟', 
+      tags: ['素食', '低卡'], 
+      image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800&h=600&fit=crop',
+      ingredients: ['嫩豆腐 150g', '混合蔬菜 200g', '橄榄油 1 勺', '香草适量', '时令水果 100g'], 
+      steps: ['豆腐切块', '蔬菜切块', '放入烤箱 200 度烤 20 分钟', '撒上香草'] 
+    },
+    { 
+      id: 2, 
+      name: '番茄鸡蛋汤面', 
+      calories: 350, 
+      time: '20 分钟', 
+      tags: ['暖胃'], 
+      image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=800&h=600&fit=crop',
+      ingredients: ['全麦面条 60g', '番茄 2 个', '鸡蛋 1 个', '青菜 50g', '时令水果 100g'], 
+      steps: ['番茄炒出汁', '加水煮开', '下面条', '打入蛋花', '放入青菜'] 
+    },
+    { 
+      id: 3, 
+      name: '蒸蛋配时蔬', 
+      calories: 300, 
+      time: '25 分钟', 
+      tags: ['低卡', '高蛋白'], 
+      image: 'https://images.unsplash.com/photo-1626804475297-411dbe66f3eb?w=800&h=600&fit=crop',
+      ingredients: ['鸡蛋 2 个', '西兰花 100g', '胡萝卜 50g', '虾仁 50g', '时令水果 100g'], 
+      steps: ['鸡蛋打散加温水', '放入虾仁蒸 8 分钟', '蔬菜焯水', '淋上生抽'] 
+    }
   ]
 };
 
@@ -105,15 +186,21 @@ const MealCard = React.memo(({ type, recipe, onClick }) => {
       className={`meal-card bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer transform ${c.accent} border-t-4`}
       aria-label={`查看${c.label}：${recipe.name}`}
     >
-      <div className={`bg-gradient-to-r ${c.bg} p-6 text-white`}>
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-2xl font-bold">{c.icon} {c.label}</h3>
-            <p className="text-sm opacity-90 mt-1">点击查看详情</p>
-          </div>
-          <span className="text-5xl" aria-hidden="true">{c.icon}</span>
+      {/* 菜品图片 */}
+      <div className="relative h-48 overflow-hidden">
+        <img 
+          src={recipe.image} 
+          alt={recipe.name}
+          className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+          loading="lazy"
+        />
+        <div className="absolute top-3 right-3">
+          <span className={`px-3 py-1 bg-white/95 backdrop-blur-sm rounded-full text-xs font-bold text-gray-700 shadow-lg`}>
+            {c.icon} {c.label}
+          </span>
         </div>
       </div>
+      
       <div className="p-6">
         <h4 className="text-xl font-bold text-gray-800 mb-3">{recipe.name}</h4>
         <NutritionBadge calories={recipe.calories} time={recipe.time} />
@@ -175,28 +262,37 @@ const Modal = ({ recipe, onClose }) => {
         className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-slideUp"
         role="document"
       >
-        {/* 头部 */}
-        <div className="sticky top-0 bg-gradient-to-r from-purple-500 to-indigo-500 p-8 text-white">
+        {/* 菜品大图 */}
+        <div className="relative h-64 sm:h-72 overflow-hidden rounded-t-3xl">
+          <img 
+            src={recipe.image} 
+            alt={recipe.name}
+            className="w-full h-full object-cover"
+          />
           <button 
             onClick={onClose}
-            className="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-white/50"
+            className="absolute top-4 right-4 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 shadow-lg"
             aria-label="关闭详情"
           >
             <span aria-hidden="true">✕</span>
           </button>
-          <h2 id="modal-title" className="text-3xl font-bold">{recipe.name}</h2>
-          <div className="flex items-center gap-6 mt-4 text-sm">
-            <span className="flex items-center">
-              <span className="mr-2 text-xl" aria-hidden="true">🔥</span> {recipe.calories}大卡
-            </span>
-            <span className="flex items-center">
-              <span className="mr-2 text-xl" aria-hidden="true">⏱️</span> {recipe.time}
-            </span>
-          </div>
         </div>
         
-        {/* 内容区 */}
-        <div className="p-8">
+        {/* 信息区 */}
+        <div className="p-6 sm:p-8">
+          {/* 标题和营养信息 */}
+          <div className="mb-6">
+            <h2 id="modal-title" className="text-2xl sm:text-3xl font-bold text-gray-800 mb-3">{recipe.name}</h2>
+            <div className="flex items-center gap-6 text-sm">
+              <span className="flex items-center text-orange-600 font-medium">
+                <span className="mr-2 text-xl" aria-hidden="true">🔥</span> {recipe.calories}大卡
+              </span>
+              <span className="flex items-center text-blue-600 font-medium">
+                <span className="mr-2 text-xl" aria-hidden="true">⏱️</span> {recipe.time}
+              </span>
+            </div>
+          </div>
+
           {/* 食材准备 */}
           <div className="mb-8">
             <h3 className="font-bold text-gray-800 mb-4 flex items-center text-lg">
