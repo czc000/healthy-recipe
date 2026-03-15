@@ -311,17 +311,22 @@ const getDailyRecipes = () => {
   };
 };
 
-// 获取当季水果 - 按旬轮换（每 10 天换一种）
+// 获取当季水果 - 每日轮换（在当季范围内随机但可预测）
 const getSeasonalFruit = () => {
   const today = new Date();
   const month = today.getMonth() + 1;
   const day = today.getDate();
+  const year = today.getFullYear();
   
-  // 按旬划分：上旬 (1-10)、中旬 (11-20)、下旬 (21-月底)
-  const旬 = day <= 10 ? 0 : day <= 20 ? 1 : 2;
+  // 计算今天是今年的第几天
+  const startOfYear = new Date(year, 0, 0);
+  const dayOfYear = Math.floor((today - startOfYear) / (1000 * 60 * 60 * 24));
   
   const fruits = seasonalFruits[month];
-  return fruits[旬 % fruits.length];
+  
+  // 使用 dayOfYear 确保每天轮换但可预测（不用随机数）
+  // 在当月水果范围内循环选择
+  return fruits[dayOfYear % fruits.length];
 };
 
 const formatDate = () => new Date().toLocaleDateString('zh-CN', { 
