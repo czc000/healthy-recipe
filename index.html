@@ -165,6 +165,26 @@
         .meal-card:active {
           transform: scale(0.98);
         }
+        /* Improve card spacing on mobile */
+        .grid {
+          gap: 1rem !important;
+        }
+      }
+      
+      /* Line clamp utility */
+      .line-clamp-1 {
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      
+      /* Smooth image transitions */
+      .meal-card img {
+        transition: transform 0.5s ease;
+      }
+      .meal-card:hover img {
+        transform: scale(1.1);
       }
     </style>
     
