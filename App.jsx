@@ -320,9 +320,9 @@ const DishArtwork = ({ icon, gradient, name }) => (
 // 餐食卡片组件
 const MealCard = React.memo(({ type, recipe, onClick }) => {
   const colors = {
-    breakfast: { bg: 'from-amber-400 to-orange-500', icon: '🌅', label: '早餐', accent: 'border-amber-500' },
-    lunch: { bg: 'from-emerald-400 to-green-500', icon: '☀️', label: '午餐', accent: 'border-emerald-500' },
-    dinner: { bg: 'from-indigo-400 to-purple-500', icon: '🌙', label: '晚餐', accent: 'border-indigo-500' }
+    breakfast: { bg: 'from-amber-400 to-orange-500', icon: '🌅', label: '早餐' },
+    lunch: { bg: 'from-emerald-400 to-green-500', icon: '☀️', label: '午餐' },
+    dinner: { bg: 'from-indigo-400 to-purple-500', icon: '🌙', label: '晚餐' }
   };
   const c = colors[type];
 
@@ -332,11 +332,11 @@ const MealCard = React.memo(({ type, recipe, onClick }) => {
       onKeyDown={(e) => e.key === 'Enter' && onClick()}
       role="button"
       tabIndex={0}
-      className={`meal-card bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer transform hover:-translate-y-2 transition-all duration-300 ${c.accent} border-t-4`}
+      className="meal-card bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer transform hover:-translate-y-2 transition-all duration-300"
       aria-label={`查看${c.label}：${recipe.name}`}
     >
-      {/* 菜品插图区域 */}
-      <div className="relative">
+      {/* 菜品插图区域 - 渐变背景延伸到顶部 */}
+      <div className={`relative bg-gradient-to-r ${c.bg}`}>
         <DishArtwork icon={recipe.icon} gradient={recipe.gradient} name={recipe.name} />
         <div className="absolute top-3 right-3">
           <span className="px-3 py-1.5 bg-white/95 backdrop-blur-sm rounded-full text-xs font-bold text-gray-700 shadow-lg">
