@@ -5,19 +5,80 @@ import { createRoot } from 'react-dom/client';
 // 数据层
 // ============================================================================
 
+// 时令水果 - 按旬划分（每 10 天换一种），更符合实际成熟期
 const seasonalFruits = {
-  1: { name: '柑橘', emoji: '🍊', color: 'from-orange-400 to-orange-500' },
-  2: { name: '草莓', emoji: '🍓', color: 'from-pink-400 to-red-500' },
-  3: { name: '菠萝', emoji: '🍍', color: 'from-yellow-400 to-orange-400' },
-  4: { name: '芒果', emoji: '🥭', color: 'from-yellow-500 to-orange-500' },
-  5: { name: '樱桃', emoji: '🍒', color: 'from-red-500 to-red-700' },
-  6: { name: '西瓜', emoji: '🍉', color: 'from-green-500 to-green-700' },
-  7: { name: '葡萄', emoji: '🍇', color: 'from-purple-500 to-purple-700' },
-  8: { name: '桃子', emoji: '🍑', color: 'from-pink-300 to-pink-500' },
-  9: { name: '梨', emoji: '🍐', color: 'from-green-300 to-green-500' },
-  10: { name: '苹果', emoji: '🍎', color: 'from-red-400 to-red-600' },
-  11: { name: '柿子', emoji: '🟠', color: 'from-orange-500 to-red-500' },
-  12: { name: '柚子', emoji: '🍊', color: 'from-yellow-400 to-orange-400' }
+  // 1 月：冬季水果
+  1: [
+    { name: '柑橘', emoji: '🍊', color: 'from-orange-400 to-orange-500' },
+    { name: '草莓', emoji: '🍓', color: 'from-pink-400 to-red-500' },
+    { name: '甘蔗', emoji: '🎋', color: 'from-green-400 to-green-600' }
+  ],
+  // 2 月：冬春交替
+  2: [
+    { name: '草莓', emoji: '🍓', color: 'from-pink-400 to-red-500' },
+    { name: '圣女果', emoji: '🍅', color: 'from-red-400 to-red-600' },
+    { name: '枇杷', emoji: '🟡', color: 'from-yellow-300 to-yellow-500' }
+  ],
+  // 3 月：春季水果
+  3: [
+    { name: '菠萝', emoji: '🍍', color: 'from-yellow-400 to-orange-400' },
+    { name: '桑葚', emoji: '🟣', color: 'from-purple-500 to-purple-700' },
+    { name: '樱桃', emoji: '🍒', color: 'from-red-500 to-red-700' }
+  ],
+  // 4 月：春末
+  4: [
+    { name: '芒果', emoji: '🥭', color: 'from-yellow-500 to-orange-500' },
+    { name: '山竹', emoji: '🟣', color: 'from-purple-600 to-purple-800' },
+    { name: '莲雾', emoji: '🔴', color: 'from-red-400 to-pink-500' }
+  ],
+  // 5 月：初夏
+  5: [
+    { name: '樱桃', emoji: '🍒', color: 'from-red-500 to-red-700' },
+    { name: '荔枝', emoji: '🔴', color: 'from-red-500 to-red-600' },
+    { name: '杨梅', emoji: '🟣', color: 'from-purple-600 to-red-700' }
+  ],
+  // 6 月：盛夏
+  6: [
+    { name: '西瓜', emoji: '🍉', color: 'from-green-500 to-green-700' },
+    { name: '水蜜桃', emoji: '🍑', color: 'from-pink-300 to-pink-500' },
+    { name: '蓝莓', emoji: '🫐', color: 'from-blue-500 to-blue-700' }
+  ],
+  // 7 月：酷暑
+  7: [
+    { name: '葡萄', emoji: '🍇', color: 'from-purple-500 to-purple-700' },
+    { name: '火龙果', emoji: '🐉', color: 'from-pink-500 to-red-500' },
+    { name: '哈密瓜', emoji: '🍈', color: 'from-green-300 to-green-500' }
+  ],
+  // 8 月：夏末
+  8: [
+    { name: '桃子', emoji: '🍑', color: 'from-pink-300 to-pink-500' },
+    { name: '李子', emoji: '🟣', color: 'from-purple-400 to-purple-600' },
+    { name: '龙眼', emoji: '🟤', color: 'from-yellow-600 to-orange-600' }
+  ],
+  // 9 月：初秋
+  9: [
+    { name: '梨', emoji: '🍐', color: 'from-green-300 to-green-500' },
+    { name: '石榴', emoji: '🔴', color: 'from-red-500 to-red-700' },
+    { name: '猕猴桃', emoji: '🥝', color: 'from-green-500 to-green-700' }
+  ],
+  // 10 月：深秋
+  10: [
+    { name: '苹果', emoji: '🍎', color: 'from-red-400 to-red-600' },
+    { name: '柿子', emoji: '🟠', color: 'from-orange-500 to-red-500' },
+    { name: '冬枣', emoji: '🟢', color: 'from-green-400 to-yellow-500' }
+  ],
+  // 11 月：秋冬
+  11: [
+    { name: '柚子', emoji: '🍊', color: 'from-yellow-400 to-orange-400' },
+    { name: '橙子', emoji: '🍊', color: 'from-orange-400 to-orange-600' },
+    { name: '山楂', emoji: '🔴', color: 'from-red-500 to-red-700' }
+  ],
+  // 12 月：寒冬
+  12: [
+    { name: '柑橘', emoji: '🍊', color: 'from-orange-400 to-orange-500' },
+    { name: '甘蔗', emoji: '🎋', color: 'from-green-400 to-green-600' },
+    { name: '草莓', emoji: '🍓', color: 'from-pink-400 to-red-500' }
+  ]
 };
 
 // 菜品数据 - 使用 SVG 图标和精美配色
@@ -250,7 +311,18 @@ const getDailyRecipes = () => {
   };
 };
 
-const getSeasonalFruit = () => seasonalFruits[new Date().getMonth() + 1];
+// 获取当季水果 - 按旬轮换（每 10 天换一种）
+const getSeasonalFruit = () => {
+  const today = new Date();
+  const month = today.getMonth() + 1;
+  const day = today.getDate();
+  
+  // 按旬划分：上旬 (1-10)、中旬 (11-20)、下旬 (21-月底)
+  const旬 = day <= 10 ? 0 : day <= 20 ? 1 : 2;
+  
+  const fruits = seasonalFruits[month];
+  return fruits[旬 % fruits.length];
+};
 
 const formatDate = () => new Date().toLocaleDateString('zh-CN', { 
   month: 'long', 
