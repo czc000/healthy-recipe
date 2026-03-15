@@ -311,7 +311,7 @@ const getDailyRecipes = () => {
   };
 };
 
-// 获取当季水果 - 每日轮换（在当季范围内随机但可预测）
+// 获取当季水果 - 每日自然轮换（带季节权重的随机）
 const getSeasonalFruit = () => {
   const today = new Date();
   const month = today.getMonth() + 1;
@@ -324,9 +324,12 @@ const getSeasonalFruit = () => {
   
   const fruits = seasonalFruits[month];
   
-  // 使用 dayOfYear 确保每天轮换但可预测（不用随机数）
-  // 在当月水果范围内循环选择
-  return fruits[dayOfYear % fruits.length];
+  // 使用简单的伪随机算法（基于日期，确保同一天结果一致）
+  // 这样用户刷新页面不会变，但每天都不一样
+  const seed = year * 1000 + month * 100 + day;
+  const randomIndex = (seed * 9301 + 49297) % 233280 % fruits.length;
+  
+  return fruits[randomIndex];
 };
 
 const formatDate = () => new Date().toLocaleDateString('zh-CN', { 
