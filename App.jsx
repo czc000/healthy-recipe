@@ -5,79 +5,115 @@ import { createRoot } from 'react-dom/client';
 // 数据层
 // ============================================================================
 
-// 时令水果 - 按旬划分（每 10 天换一种），更符合实际成熟期
+// 时令水果 - 扩展品种，每月 5-6 种当季水果
 const seasonalFruits = {
   // 1 月：冬季水果
   1: [
     { name: '柑橘', emoji: '🍊', color: 'from-orange-400 to-orange-500' },
     { name: '草莓', emoji: '🍓', color: 'from-pink-400 to-red-500' },
-    { name: '甘蔗', emoji: '🎋', color: 'from-green-400 to-green-600' }
+    { name: '甘蔗', emoji: '🎋', color: 'from-green-400 to-green-600' },
+    { name: '车厘子', emoji: '🍒', color: 'from-red-600 to-red-800' },
+    { name: '金桔', emoji: '🟠', color: 'from-yellow-400 to-orange-400' },
+    { name: '火龙果', emoji: '🐉', color: 'from-pink-500 to-red-500' }
   ],
   // 2 月：冬春交替
   2: [
     { name: '草莓', emoji: '🍓', color: 'from-pink-400 to-red-500' },
     { name: '圣女果', emoji: '🍅', color: 'from-red-400 to-red-600' },
-    { name: '枇杷', emoji: '🟡', color: 'from-yellow-300 to-yellow-500' }
+    { name: '枇杷', emoji: '🟡', color: 'from-yellow-300 to-yellow-500' },
+    { name: '橙子', emoji: '🍊', color: 'from-orange-400 to-orange-600' },
+    { name: '香蕉', emoji: '🍌', color: 'from-yellow-400 to-yellow-500' },
+    { name: '木瓜', emoji: '🥭', color: 'from-orange-300 to-orange-500' }
   ],
   // 3 月：春季水果
   3: [
     { name: '菠萝', emoji: '🍍', color: 'from-yellow-400 to-orange-400' },
     { name: '桑葚', emoji: '🟣', color: 'from-purple-500 to-purple-700' },
-    { name: '樱桃', emoji: '🍒', color: 'from-red-500 to-red-700' }
+    { name: '樱桃', emoji: '🍒', color: 'from-red-500 to-red-700' },
+    { name: '芒果', emoji: '🥭', color: 'from-yellow-500 to-orange-500' },
+    { name: '莲雾', emoji: '🔴', color: 'from-red-300 to-pink-400' },
+    { name: '柠檬', emoji: '🍋', color: 'from-yellow-300 to-yellow-400' }
   ],
   // 4 月：春末
   4: [
     { name: '芒果', emoji: '🥭', color: 'from-yellow-500 to-orange-500' },
     { name: '山竹', emoji: '🟣', color: 'from-purple-600 to-purple-800' },
-    { name: '莲雾', emoji: '🔴', color: 'from-red-400 to-pink-500' }
+    { name: '莲雾', emoji: '🔴', color: 'from-red-400 to-pink-500' },
+    { name: '菠萝蜜', emoji: '🟡', color: 'from-yellow-500 to-amber-500' },
+    { name: '青梅', emoji: '🟢', color: 'from-green-400 to-green-600' },
+    { name: '枇杷', emoji: '🟡', color: 'from-yellow-400 to-orange-400' }
   ],
   // 5 月：初夏
   5: [
     { name: '樱桃', emoji: '🍒', color: 'from-red-500 to-red-700' },
     { name: '荔枝', emoji: '🔴', color: 'from-red-500 to-red-600' },
-    { name: '杨梅', emoji: '🟣', color: 'from-purple-600 to-red-700' }
+    { name: '杨梅', emoji: '🟣', color: 'from-purple-600 to-red-700' },
+    { name: '枇杷', emoji: '🟡', color: 'from-yellow-400 to-orange-400' },
+    { name: '西瓜', emoji: '🍉', color: 'from-green-500 to-green-700' },
+    { name: '桃子', emoji: '🍑', color: 'from-pink-300 to-pink-500' }
   ],
   // 6 月：盛夏
   6: [
     { name: '西瓜', emoji: '🍉', color: 'from-green-500 to-green-700' },
     { name: '水蜜桃', emoji: '🍑', color: 'from-pink-300 to-pink-500' },
-    { name: '蓝莓', emoji: '🫐', color: 'from-blue-500 to-blue-700' }
+    { name: '蓝莓', emoji: '🫐', color: 'from-blue-500 to-blue-700' },
+    { name: '荔枝', emoji: '🔴', color: 'from-red-400 to-red-600' },
+    { name: '龙眼', emoji: '🟤', color: 'from-yellow-600 to-orange-600' },
+    { name: '李子', emoji: '🟣', color: 'from-purple-400 to-purple-600' }
   ],
   // 7 月：酷暑
   7: [
     { name: '葡萄', emoji: '🍇', color: 'from-purple-500 to-purple-700' },
     { name: '火龙果', emoji: '🐉', color: 'from-pink-500 to-red-500' },
-    { name: '哈密瓜', emoji: '🍈', color: 'from-green-300 to-green-500' }
+    { name: '哈密瓜', emoji: '🍈', color: 'from-green-300 to-green-500' },
+    { name: '西瓜', emoji: '🍉', color: 'from-green-500 to-green-700' },
+    { name: '桃子', emoji: '🍑', color: 'from-pink-300 to-pink-500' },
+    { name: '百香果', emoji: '🟣', color: 'from-purple-500 to-purple-600' }
   ],
   // 8 月：夏末
   8: [
     { name: '桃子', emoji: '🍑', color: 'from-pink-300 to-pink-500' },
     { name: '李子', emoji: '🟣', color: 'from-purple-400 to-purple-600' },
-    { name: '龙眼', emoji: '🟤', color: 'from-yellow-600 to-orange-600' }
+    { name: '龙眼', emoji: '🟤', color: 'from-yellow-600 to-orange-600' },
+    { name: '葡萄', emoji: '🍇', color: 'from-purple-500 to-purple-700' },
+    { name: '石榴', emoji: '🔴', color: 'from-red-500 to-red-700' },
+    { name: '猕猴桃', emoji: '🥝', color: 'from-green-500 to-green-700' }
   ],
   // 9 月：初秋
   9: [
     { name: '梨', emoji: '🍐', color: 'from-green-300 to-green-500' },
     { name: '石榴', emoji: '🔴', color: 'from-red-500 to-red-700' },
-    { name: '猕猴桃', emoji: '🥝', color: 'from-green-500 to-green-700' }
+    { name: '猕猴桃', emoji: '🥝', color: 'from-green-500 to-green-700' },
+    { name: '葡萄', emoji: '🍇', color: 'from-purple-500 to-purple-700' },
+    { name: '柿子', emoji: '🟠', color: 'from-orange-400 to-orange-600' },
+    { name: '无花果', emoji: '🟣', color: 'from-purple-600 to-green-600' }
   ],
   // 10 月：深秋
   10: [
     { name: '苹果', emoji: '🍎', color: 'from-red-400 to-red-600' },
     { name: '柿子', emoji: '🟠', color: 'from-orange-500 to-red-500' },
-    { name: '冬枣', emoji: '🟢', color: 'from-green-400 to-yellow-500' }
+    { name: '冬枣', emoji: '🟢', color: 'from-green-400 to-yellow-500' },
+    { name: '柚子', emoji: '🍊', color: 'from-yellow-400 to-orange-400' },
+    { name: '山楂', emoji: '🔴', color: 'from-red-500 to-red-700' },
+    { name: '橙子', emoji: '🍊', color: 'from-orange-400 to-orange-600' }
   ],
   // 11 月：秋冬
   11: [
     { name: '柚子', emoji: '🍊', color: 'from-yellow-400 to-orange-400' },
     { name: '橙子', emoji: '🍊', color: 'from-orange-400 to-orange-600' },
-    { name: '山楂', emoji: '🔴', color: 'from-red-500 to-red-700' }
+    { name: '山楂', emoji: '🔴', color: 'from-red-500 to-red-700' },
+    { name: '苹果', emoji: '🍎', color: 'from-red-400 to-red-600' },
+    { name: '梨', emoji: '🍐', color: 'from-green-300 to-green-500' },
+    { name: '金桔', emoji: '🟠', color: 'from-yellow-400 to-orange-400' }
   ],
   // 12 月：寒冬
   12: [
     { name: '柑橘', emoji: '🍊', color: 'from-orange-400 to-orange-500' },
     { name: '甘蔗', emoji: '🎋', color: 'from-green-400 to-green-600' },
-    { name: '草莓', emoji: '🍓', color: 'from-pink-400 to-red-500' }
+    { name: '草莓', emoji: '🍓', color: 'from-pink-400 to-red-500' },
+    { name: '车厘子', emoji: '🍒', color: 'from-red-600 to-red-800' },
+    { name: '橙子', emoji: '🍊', color: 'from-orange-400 to-orange-600' },
+    { name: '香蕉', emoji: '🍌', color: 'from-yellow-400 to-yellow-500' }
   ]
 };
 
