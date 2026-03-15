@@ -20,7 +20,7 @@ const seasonalFruits = {
   12: { name: '柚子', emoji: '🍊', color: 'from-yellow-400 to-orange-400' }
 };
 
-// 菜品数据 - 使用 emoji 和配色方案代替图片
+// 菜品数据 - 使用 SVG 图标和精美配色
 const recipes = {
   breakfast: [
     { 
@@ -29,8 +29,9 @@ const recipes = {
       calories: 350, 
       time: '10 分钟', 
       tags: ['低脂', '高纤维'], 
-      emoji: '🥣',
-      color: 'from-amber-100 to-orange-100',
+      icon: 'bowl',
+      gradient: 'from-amber-400 via-orange-400 to-red-400',
+      accentColor: '#f59e0b',
       ingredients: ['燕麦片 50g', '时令水果 100g', '牛奶 200ml', '蜂蜜 1 勺', '坚果 15g'], 
       steps: ['燕麦片加入牛奶煮熟', '加入切好的时令水果', '淋上蜂蜜，撒上坚果'] 
     },
@@ -40,8 +41,9 @@ const recipes = {
       calories: 380, 
       time: '15 分钟', 
       tags: ['高蛋白'], 
-      emoji: '🥪',
-      color: 'from-yellow-100 to-amber-100',
+      icon: 'sandwich',
+      gradient: 'from-yellow-300 via-amber-400 to-orange-400',
+      accentColor: '#eab308',
       ingredients: ['全麦面包 2 片', '鸡蛋 1 个', '生菜 2 片', '番茄 1 个', '时令水果 100g'], 
       steps: ['鸡蛋煎熟', '面包烤至微黄', '依次放入生菜、番茄、鸡蛋', '搭配时令水果'] 
     },
@@ -51,8 +53,9 @@ const recipes = {
       calories: 320, 
       time: '5 分钟', 
       tags: ['益生菌'], 
-      emoji: '🥛',
-      color: 'from-blue-100 to-indigo-100',
+      icon: 'yogurt',
+      gradient: 'from-blue-300 via-indigo-400 to-purple-400',
+      accentColor: '#6366f1',
       ingredients: ['希腊酸奶 200g', '时令水果 150g', '格兰诺拉麦片 30g', '奇亚籽 1 勺'], 
       steps: ['酸奶倒入碗中', '加入切好的时令水果', '撒上麦片和奇亚籽'] 
     }
@@ -64,8 +67,9 @@ const recipes = {
       calories: 450, 
       time: '25 分钟', 
       tags: ['低 GI', '高蛋白'], 
-      emoji: '🥗',
-      color: 'from-green-100 to-emerald-100',
+      icon: 'salad',
+      gradient: 'from-green-400 via-emerald-400 to-teal-400',
+      accentColor: '#10b981',
       ingredients: ['藜麦 80g', '鸡胸肉 100g', '混合蔬菜 150g', '时令水果 100g', '橄榄油 1 勺'], 
       steps: ['藜麦煮熟晾凉', '鸡胸肉煎熟切块', '混合蔬菜铺底', '放入藜麦和鸡肉', '淋上橄榄油'] 
     },
@@ -75,8 +79,9 @@ const recipes = {
       calories: 380, 
       time: '30 分钟', 
       tags: ['低脂', 'Omega-3'], 
-      emoji: '🐟',
-      color: 'from-cyan-100 to-blue-100',
+      icon: 'fish',
+      gradient: 'from-cyan-400 via-blue-400 to-indigo-400',
+      accentColor: '#06b6d4',
       ingredients: ['鲈鱼 150g', '西兰花 100g', '胡萝卜 50g', '姜葱适量', '时令水果 100g'], 
       steps: ['鱼处理干净', '放上姜葱蒸 10 分钟', '蔬菜焯水', '淋上蒸鱼豉油'] 
     },
@@ -86,8 +91,9 @@ const recipes = {
       calories: 420, 
       time: '20 分钟', 
       tags: ['高纤维'], 
-      emoji: '🍚',
-      color: 'from-orange-100 to-red-100',
+      icon: 'rice',
+      gradient: 'from-orange-400 via-red-400 to-pink-400',
+      accentColor: '#f97316',
       ingredients: ['糙米饭 150g', '鸡蛋 1 个', '混合蔬菜 150g', '虾仁 50g', '时令水果 100g'], 
       steps: ['糙米饭提前煮好', '鸡蛋炒散', '加入蔬菜和虾仁翻炒', '放入米饭炒匀'] 
     }
@@ -99,8 +105,9 @@ const recipes = {
       calories: 320, 
       time: '30 分钟', 
       tags: ['素食', '低卡'], 
-      emoji: '🥦',
-      color: 'from-green-100 to-teal-100',
+      icon: 'vegetable',
+      gradient: 'from-lime-400 via-green-400 to-emerald-400',
+      accentColor: '#84cc16',
       ingredients: ['嫩豆腐 150g', '混合蔬菜 200g', '橄榄油 1 勺', '香草适量', '时令水果 100g'], 
       steps: ['豆腐切块', '蔬菜切块', '放入烤箱 200 度烤 20 分钟', '撒上香草'] 
     },
@@ -110,8 +117,9 @@ const recipes = {
       calories: 350, 
       time: '20 分钟', 
       tags: ['暖胃'], 
-      emoji: '🍜',
-      color: 'from-red-100 to-pink-100',
+      icon: 'noodles',
+      gradient: 'from-red-400 via-rose-400 to-pink-400',
+      accentColor: '#e11d48',
       ingredients: ['全麦面条 60g', '番茄 2 个', '鸡蛋 1 个', '青菜 50g', '时令水果 100g'], 
       steps: ['番茄炒出汁', '加水煮开', '下面条', '打入蛋花', '放入青菜'] 
     },
@@ -121,12 +129,111 @@ const recipes = {
       calories: 300, 
       time: '25 分钟', 
       tags: ['低卡', '高蛋白'], 
-      emoji: '🥚',
-      color: 'from-yellow-100 to-orange-100',
+      icon: 'egg',
+      gradient: 'from-yellow-300 via-amber-300 to-orange-300',
+      accentColor: '#fbbf24',
       ingredients: ['鸡蛋 2 个', '西兰花 100g', '胡萝卜 50g', '虾仁 50g', '时令水果 100g'], 
       steps: ['鸡蛋打散加温水', '放入虾仁蒸 8 分钟', '蔬菜焯水', '淋上生抽'] 
     }
   ]
+};
+
+// ============================================================================
+// SVG 美食图标
+// ============================================================================
+
+const FoodIcons = {
+  bowl: (
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="35" rx="35" ry="12" fill="white" fillOpacity="0.9"/>
+      <path d="M15 35C15 35 20 75 50 75C80 75 85 35 85 35" fill="white" fillOpacity="0.9"/>
+      <ellipse cx="50" cy="35" rx="25" ry="8" fill="#f59e0b" fillOpacity="0.6"/>
+      <circle cx="40" cy="32" r="4" fill="#ef4444" fillOpacity="0.8"/>
+      <circle cx="55" cy="30" r="3" fill="#22c55e" fillOpacity="0.8"/>
+      <circle cx="48" cy="38" r="3" fill="#eab308" fillOpacity="0.8"/>
+    </svg>
+  ),
+  sandwich: (
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 45L50 25L80 45L80 65L20 65L20 45Z" fill="#fbbf24" fillOpacity="0.9"/>
+      <path d="M20 55L50 35L80 55" stroke="#d97706" strokeWidth="2" fill="none"/>
+      <ellipse cx="50" cy="50" rx="30" ry="8" fill="#22c55e" fillOpacity="0.8"/>
+      <ellipse cx="50" cy="55" rx="30" ry="8" fill="#ef4444" fillOpacity="0.8"/>
+      <path d="M20 65L50 85L80 65" fill="#f59e0b" fillOpacity="0.9"/>
+    </svg>
+  ),
+  yogurt: (
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="30" rx="30" ry="10" fill="white" fillOpacity="0.9"/>
+      <path d="M20 30L25 70C25 75 35 80 50 80C65 80 75 75 75 70L80 30" fill="white" fillOpacity="0.9"/>
+      <ellipse cx="50" cy="30" rx="22" ry="7" fill="#6366f1" fillOpacity="0.6"/>
+      <circle cx="42" cy="28" r="3" fill="#ec4899" fillOpacity="0.9"/>
+      <circle cx="55" cy="26" r="2" fill="#8b5cf6" fillOpacity="0.9"/>
+      <circle cx="50" cy="32" r="2" fill="#06b6d4" fillOpacity="0.9"/>
+    </svg>
+  ),
+  salad: (
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="40" rx="35" ry="12" fill="white" fillOpacity="0.9"/>
+      <path d="M15 40C15 40 20 75 50 75C80 75 85 40 85 40" fill="white" fillOpacity="0.9"/>
+      <circle cx="35" cy="38" r="8" fill="#22c55e" fillOpacity="0.8"/>
+      <circle cx="50" cy="35" r="7" fill="#10b981" fillOpacity="0.8"/>
+      <circle cx="65" cy="38" r="8" fill="#14b8a6" fillOpacity="0.8"/>
+      <circle cx="42" cy="45" r="5" fill="#ef4444" fillOpacity="0.8"/>
+      <circle cx="58" cy="45" r="5" fill="#f59e0b" fillOpacity="0.8"/>
+    </svg>
+  ),
+  fish: (
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="50" rx="30" ry="18" fill="white" fillOpacity="0.9"/>
+      <path d="M80 50L95 35L95 65L80 50Z" fill="white" fillOpacity="0.9"/>
+      <circle cx="40" cy="45" r="4" fill="#1e3a5f" fillOpacity="0.8"/>
+      <path d="M55 50Q65 55 75 50" stroke="#f97316" strokeWidth="2" fill="none"/>
+      <path d="M30 50Q40 45 50 50Q60 55 70 50" stroke="#06b6d4" strokeWidth="2" fill="none" opacity="0.5"/>
+    </svg>
+  ),
+  rice: (
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="40" rx="32" ry="10" fill="white" fillOpacity="0.9"/>
+      <path d="M18 40C18 40 22 70 50 70C78 70 82 40 82 40" fill="white" fillOpacity="0.9"/>
+      <circle cx="38" cy="38" r="3" fill="#f59e0b" fillOpacity="0.8"/>
+      <circle cx="50" cy="35" r="3" fill="#22c55e" fillOpacity="0.8"/>
+      <circle cx="62" cy="38" r="3" fill="#ef4444" fillOpacity="0.8"/>
+      <circle cx="44" cy="45" r="3" fill="#eab308" fillOpacity="0.8"/>
+      <circle cx="56" cy="45" r="3" fill="#f97316" fillOpacity="0.8"/>
+    </svg>
+  ),
+  vegetable: (
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="35" cy="45" r="12" fill="#22c55e" fillOpacity="0.8"/>
+      <circle cx="50" cy="40" r="10" fill="#10b981" fillOpacity="0.8"/>
+      <circle cx="65" cy="45" r="12" fill="#14b8a6" fillOpacity="0.8"/>
+      <circle cx="42" cy="55" r="10" fill="#84cc16" fillOpacity="0.8"/>
+      <circle cx="58" cy="55" r="10" fill="#22c55e" fillOpacity="0.8"/>
+      <path d="M35 35L35 25" stroke="#166534" strokeWidth="3" strokeLinecap="round"/>
+      <path d="M50 30L50 20" stroke="#166534" strokeWidth="3" strokeLinecap="round"/>
+      <path d="M65 35L65 25" stroke="#166534" strokeWidth="3" strokeLinecap="round"/>
+    </svg>
+  ),
+  noodles: (
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="45" rx="35" ry="12" fill="white" fillOpacity="0.9"/>
+      <path d="M15 45C15 45 20 75 50 75C80 75 85 45 85 45" fill="white" fillOpacity="0.9"/>
+      <path d="M25 45Q35 55 45 45Q55 35 65 45Q75 55 85 45" stroke="#fbbf24" strokeWidth="3" fill="none"/>
+      <path d="M25 52Q35 62 45 52Q55 42 65 52Q75 62 85 52" stroke="#fbbf24" strokeWidth="3" fill="none"/>
+      <circle cx="40" cy="40" r="4" fill="#ef4444" fillOpacity="0.8"/>
+      <circle cx="60" cy="40" r="4" fill="#22c55e" fillOpacity="0.8"/>
+    </svg>
+  ),
+  egg: (
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="55" rx="28" ry="32" fill="white" fillOpacity="0.9"/>
+      <ellipse cx="50" cy="50" rx="22" ry="25" fill="#fbbf24" fillOpacity="0.8"/>
+      <ellipse cx="42" cy="45" rx="8" ry="10" fill="#fcd34d" fillOpacity="0.6"/>
+      <circle cx="35" cy="60" r="5" fill="#22c55e" fillOpacity="0.8"/>
+      <circle cx="65" cy="58" r="4" fill="#f97316" fillOpacity="0.8"/>
+    </svg>
+  )
 };
 
 // ============================================================================
@@ -177,13 +284,35 @@ const SeasonalFruitBadge = ({ fruit }) => (
   </div>
 );
 
-// 菜品图片区域（使用 emoji + 渐变色背景）
-const DishImage = ({ emoji, color, name }) => (
-  <div className={`h-48 bg-gradient-to-br ${color} flex items-center justify-center relative overflow-hidden`}>
-    <div className="absolute inset-0 bg-black/5"></div>
-    <span className="text-8xl relative z-10 transform hover:scale-110 transition-transform duration-300" role="img" aria-label={name}>
-      {emoji}
-    </span>
+// 菜品插图区域 - 使用 SVG 图标 + 精美渐变
+const DishArtwork = ({ icon, gradient, name }) => (
+  <div className={`h-48 bg-gradient-to-br ${gradient} flex items-center justify-center relative overflow-hidden group`}>
+    {/* 装饰性背景元素 */}
+    <div className="absolute inset-0 opacity-30">
+      <div className="absolute top-4 left-4 w-16 h-16 bg-white rounded-full blur-xl"></div>
+      <div className="absolute bottom-8 right-8 w-24 h-24 bg-white rounded-full blur-2xl"></div>
+    </div>
+    
+    {/* 网格装饰 */}
+    <div className="absolute inset-0 opacity-10">
+      <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="white" strokeWidth="0.5"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid)" />
+      </svg>
+    </div>
+    
+    {/* SVG 图标 */}
+    <div className="relative z-10 transform group-hover:scale-110 transition-transform duration-500">
+      <svg className="w-32 h-32 drop-shadow-2xl" viewBox="0 0 100 100">
+        {FoodIcons[icon]}
+      </svg>
+    </div>
+    
+    {/* 底部渐变遮罩 */}
     <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/20 to-transparent"></div>
   </div>
 );
@@ -206,9 +335,9 @@ const MealCard = React.memo(({ type, recipe, onClick }) => {
       className={`meal-card bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer transform hover:-translate-y-2 transition-all duration-300 ${c.accent} border-t-4`}
       aria-label={`查看${c.label}：${recipe.name}`}
     >
-      {/* 菜品图片区域 */}
+      {/* 菜品插图区域 */}
       <div className="relative">
-        <DishImage emoji={recipe.emoji} color={recipe.color} name={recipe.name} />
+        <DishArtwork icon={recipe.icon} gradient={recipe.gradient} name={recipe.name} />
         <div className="absolute top-3 right-3">
           <span className="px-3 py-1.5 bg-white/95 backdrop-blur-sm rounded-full text-xs font-bold text-gray-700 shadow-lg">
             {c.icon} {c.label}
@@ -275,7 +404,7 @@ const Modal = ({ recipe, onClose }) => {
       >
         {/* 菜品大图区域 */}
         <div className="relative rounded-t-3xl overflow-hidden">
-          <DishImage emoji={recipe.emoji} color={recipe.color} name={recipe.name} />
+          <DishArtwork icon={recipe.icon} gradient={recipe.gradient} name={recipe.name} />
           <button 
             onClick={onClose}
             className="absolute top-4 right-4 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 shadow-lg text-xl"
